@@ -1,0 +1,49 @@
+# ============================================================
+#  configs/config.yaml  —  Project-wide path & runtime config
+#  All paths are relative to the project root.
+#  Load in code via:
+#    import yaml
+#    cfg = yaml.safe_load(open("configs/config.yaml"))
+# ============================================================
+
+project:
+  name: "medicine-recommendation-system"
+  version: "0.1.0"
+  random_seed: 42
+
+# ── Data Paths ───────────────────────────────────────────────────────────────
+paths:
+  # Original dataset — tracked by DVC, never edited in place.
+  raw_data_path: "data/raw/medeasy_cleaned_database.csv"
+
+  # Output of the preprocessing stage (cleaned, text-concatenated rows).
+  processed_data_path: "data/processed/medeasy_processed.csv"
+
+  # Directory for serialised feature artefacts (TF-IDF matrix, vectoriser).
+  features_dir: "data/features/"
+
+  # Directory for serialised model / similarity index files.
+  models_dir: "models/"
+
+  # Directory for evaluation metric JSON files (used by dvc metrics show).
+  metrics_dir: "metrics/"
+
+# ── Artefact File Names (relative to their parent dirs above) ────────────────
+artefacts:
+  tfidf_vectoriser: "tfidf_vectoriser.joblib"
+  tfidf_matrix:     "tfidf_matrix.npz"          # scipy sparse, space-efficient
+  medicine_index:   "medicine_index.csv"         # row-order lookup table
+  metrics_file:     "recommendation_metrics.json"
+
+# ── API Server ───────────────────────────────────────────────────────────────
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  reload: false    # set true for local development only
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+logging:
+  level: "INFO"    # DEBUG | INFO | WARNING | ERROR
+  log_dir: "logs/"
+  log_file: "app.log"

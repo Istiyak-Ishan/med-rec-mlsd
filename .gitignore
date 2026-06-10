@@ -1,0 +1,79 @@
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.pyo
+
+# ── Distribution / Packaging ─────────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+MANIFEST
+
+# ── Virtual Environments ─────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.env
+*.env
+
+# ── Jupyter ──────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Testing & Coverage ───────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.coveragerc
+
+# ── Type Checkers & Linters ──────────────────────────────────────────────────
+.mypy_cache/
+.ruff_cache/
+.pytype/
+
+# ── DVC ──────────────────────────────────────────────────────────────────────
+/tmp/
+.dvc/cache/
+.dvc/tmp/
+.dvc/plots/
+# Track .dvc files but not the actual large data/model files they point to
+!*.dvc
+!.dvcignore
+
+# ── Data & Models (tracked by DVC, not Git) ──────────────────────────────────
+data/raw/
+data/processed/
+data/features/
+models/
+metrics/
+
+# ── W&B / Experiment Artifacts ───────────────────────────────────────────────
+wandb/
+artifacts/
+*.wandb
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── OS & Editor Junk ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── Secrets ──────────────────────────────────────────────────────────────────
+.env
+.env.*
+secrets.yaml
+gdrive_credentials.json
