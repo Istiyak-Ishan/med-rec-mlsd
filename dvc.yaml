@@ -1,0 +1,86 @@
+# ============================================================
+#  dvc.yaml  —  DVC Pipeline Definition
+#  Medicine Recommendation System  |  DS 4491
+#
+#  Run the full pipeline:   dvc repro
+#  Run a single stage:      dvc repro <stage_name>
+#  Visualise DAG:           dvc dag
+#  Show metrics:            dvc metrics show
+#  Compare experiments:     dvc params diff
+# ============================================================
+
+stages:
+
+  # ──────────────────────────────────────────────────────────
+  #  STAGE 1 — preprocess
+  #  Cleans raw MedEasy CSV: fills NaN text fields, normalises
+  #  casing, and concatenates the text_cols into a single
+  #  "combined_text" column used by all downstream stages.
+  # ──────────────────────────────────────────────────────────
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+      - data/raw/medeasy_cleaned_database.csv
+      - src/data/preprocess.py
+    params:
+      - params.yaml:
+          - preprocessing          # tracks ALL keys under this section
+    outs:
+      - data/processed/medeasy_processed.csv
+
+  # ──────────────────────────────────────────────────────────
+  #  STAGE 2 — build_features
+  #  Fits a TF-IDF vectoriser on combined_text and serialises
+  #  both the sparse feature matrix and the medicine lookup
+  #  index (row ↔ medicine_name mapping).
+  # ──────────────────────────────────────────────────────────
+  build_features:
+    cmd: python src/features/build_features.py
+    deps:
+      - data/processed/medeasy_processed.csv
+      - src/features/build_features.py
+    params:
+      - params.yaml:
+          - features               # tracks ALL keys under this section
+    outs:
+      - data/features/tfidf_matrix.pkl
+      - data/features/medicine_index.pkl
+
+  # ──────────────────────────────────────────────────────────
+  #  STAGE 3 — train
+  #  Loads the feature matrix, computes the cosine similarity
+  #  index, evaluates retrieval quality, and serialises the
+  #  final recommender object.
+  # ──────────────────────────────────────────────────────────
+  train:
+    cmd: python src/models/train.py
+    deps:
+      - data/features/tfidf_matrix.pkl
+      - data/features/medicine_index.pkl
+      - src/models/train.py
+    params:
+      - params.yaml:
+          - model                  # tracks ALL keys under this section
+    outs:
+      - models/recommender.pkl
+    metrics:
+      - metrics/scores.json:
+          cache: false             # versioned by Git, not DVC cache
+
+  # ──────────────────────────────────────────────────────────
+  #  STAGE 4 — serve
+  #  Starts the FastAPI inference server.
+  #
+  #  frozen: true  →  skipped by `dvc repro`; run manually:
+  #    dvc repro serve           (force a single run)
+  #    uvicorn src.serving.api:app --reload --port 8000
+  #
+  #  No DVC outs — this stage is a long-running process, not
+  #  a data transformation with cacheable artefacts.
+  # ──────────────────────────────────────────────────────────
+  serve:
+    cmd: uvicorn src.serving.api:app --reload --port 8000
+    deps:
+      - models/recommender.pkl
+      - src/serving/api.py
+    frozen: true                   # excluded from dvc repro DAG

@@ -1,0 +1,31 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+    - path: data/raw/medeasy_cleaned_database.csv
+      hash: md5
+      md5: 61336d17d3de51fe0062cceb9dfdac92
+      size: 20129222
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 4826bbf8471a846abed1ee1ec30194cc
+      size: 4606
+    params:
+      params.yaml:
+        preprocessing:
+          text_cols:
+          - indications
+          - mode_of_action
+          - contraindications
+          - side_effects
+          - interactions
+          - precautions
+          - dosage
+          - generic_name
+          fill_value: not specified
+    outs:
+    - path: data/processed/medeasy_processed.csv
+      hash: md5
+      md5: cfeb732517a2d44477c8ab1109cbf39c
+      size: 24145325
