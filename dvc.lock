@@ -56,3 +56,32 @@ stages:
       hash: md5
       md5: aa91b2cfaafc33fd83ad5954e9ede18a
       size: 6114571
+  train:
+    cmd: python src/models/train.py
+    deps:
+    - path: data/features/medicine_index.pkl
+      hash: md5
+      md5: 6667e83e7a6a1c7aa53aa9dc9e468479
+      size: 49414
+    - path: data/features/tfidf_matrix.pkl
+      hash: md5
+      md5: aa91b2cfaafc33fd83ad5954e9ede18a
+      size: 6114571
+    - path: src/models/train.py
+      hash: md5
+      md5: f9fab6c7ba9f96bd1abff2a51e741458
+      size: 18407
+    params:
+      params.yaml:
+        model:
+          similarity_metric: cosine
+          min_score_threshold: 0.1
+    outs:
+    - path: metrics/scores.json
+      hash: md5
+      md5: 62e5e976cb90d7f967578b06f30d86aa
+      size: 140
+    - path: models/recommender.pkl
+      hash: md5
+      md5: 33e5362d0f9e10b36d591719abc92fd8
+      size: 25334603
