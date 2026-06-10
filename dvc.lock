@@ -29,3 +29,30 @@ stages:
       hash: md5
       md5: cfeb732517a2d44477c8ab1109cbf39c
       size: 24145325
+  build_features:
+    cmd: python src/features/build_features.py
+    deps:
+    - path: data/processed/medeasy_processed.csv
+      hash: md5
+      md5: cfeb732517a2d44477c8ab1109cbf39c
+      size: 24145325
+    - path: src/features/build_features.py
+      hash: md5
+      md5: f0c58f8af2a7dfa4782d860c0799777a
+      size: 7901
+    params:
+      params.yaml:
+        features:
+          tfidf_max_features: 8000
+          ngram_range_min: 1
+          ngram_range_max: 2
+          top_k: 10
+    outs:
+    - path: data/features/medicine_index.pkl
+      hash: md5
+      md5: 6667e83e7a6a1c7aa53aa9dc9e468479
+      size: 49414
+    - path: data/features/tfidf_matrix.pkl
+      hash: md5
+      md5: aa91b2cfaafc33fd83ad5954e9ede18a
+      size: 6114571
