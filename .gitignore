@@ -47,12 +47,6 @@ coverage.xml
 !*.dvc
 !.dvcignore
 
-# ── Data & Models (tracked by DVC, not Git) ──────────────────────────────────
-data/raw/
-data/processed/
-data/features/
-models/
-metrics/
 
 # ── W&B / Experiment Artifacts ───────────────────────────────────────────────
 wandb/
