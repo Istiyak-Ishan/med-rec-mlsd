@@ -1,47 +1,41 @@
 # ============================================================
-#  params.yaml  —  DVC-tracked hyperparameters
-#  Reference in dvc.yaml stages via:  params: [params.yaml]
-#  Load in code via:
-#    import yaml
-#    params = yaml.safe_load(open("params.yaml"))
+# params.yaml — DVC-tracked hyperparameters
+# Top-K retrieval only (no score threshold filtering)
 # ============================================================
 
 preprocessing:
-  # Columns whose text content feeds the TF-IDF vectoriser.
-  # Ordered from most to least diagnostic signal.
+  # Columns used for TF-IDF feature construction
+  # Ordered by importance
   text_cols:
-    - indications          # primary symptom / disease signal
-    - mode_of_action       # pharmacological mechanism
-    - contraindications    # safety exclusions
-    - side_effects         # adverse event profile
-    - interactions         # drug-drug interaction profile
-    - precautions          # clinical warnings
-    - dosage               # dose guidance (supports retrieval)
-    - generic_name         # active ingredient — strong identifier
+    - indications
+    - mode_of_action
+    - contraindications
+    - side_effects
+    - interactions
+    - precautions
+    - dosage
+    - generic_name
 
-  # Value used to fill any NaN cells in text_cols before concatenation.
+  # Value used to fill missing text fields
   fill_value: "not specified"
 
 # ------------------------------------------------------------
 features:
-  # Upper bound on vocabulary size kept by TF-IDF.
+  # Maximum vocabulary size for TF-IDF
   tfidf_max_features: 8000
 
-  # Unigrams + bigrams capture both single terms ("hypertension")
-  # and clinical phrases ("blood pressure", "heart failure").
+  # Capture both single words and medical phrases
   ngram_range_min: 1
   ngram_range_max: 2
 
-  # Number of candidate recommendations returned per query.
+  # Number of results returned per query
   top_k: 10
 
 # ------------------------------------------------------------
 model:
-  # Similarity function applied to the TF-IDF feature matrix.
-  # "cosine"  — standard for sparse text vectors (recommended)
-  # "dot"     — unnormalised; fast but length-sensitive
+  # Similarity metric for ranking
   similarity_metric: "cosine"
 
-  # Recommendations with a similarity score below this threshold
-  # are silently dropped from the output.
-  min_score_threshold: 0.10
+  # NOTE:
+  # No threshold is used anymore.
+  # The system ALWAYS returns top_k most similar results.

@@ -75,13 +75,12 @@ stages:
       params.yaml:
         model:
           similarity_metric: cosine
-          min_score_threshold: 0.1
     outs:
     - path: metrics/scores.json
       hash: md5
-      md5: 62e5e976cb90d7f967578b06f30d86aa
+      md5: 76c2fd3398b6750b7cbea753fa72fc35
       size: 140
     - path: models/recommender.pkl
       hash: md5
-      md5: 33e5362d0f9e10b36d591719abc92fd8
-      size: 25334603
+      md5: 25753f003d73fb0dbc48d7bc05a1b7bf
+      size: 25334571

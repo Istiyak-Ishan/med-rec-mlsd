@@ -1,7 +1,7 @@
 {
-  "coverage": 0.284512,
-  "avg_similarity": 0.969383,
+  "coverage": 0.266835,
+  "avg_similarity": 0.960612,
   "total_medicines": 2376,
   "sample_size": 100,
-  "unique_recommended": 676
+  "unique_recommended": 634
 }
