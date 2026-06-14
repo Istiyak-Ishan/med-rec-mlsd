@@ -1,5 +1,21 @@
-﻿stages:
+﻿# ============================================================
+#  dvc.yaml  -  DVC Pipeline Definition
+#  Medicine Recommendation System  |  DS 4491
+#
+#  Run the full pipeline:   dvc repro
+#  Run a single stage:      dvc repro <stage_name>
+#  Visualise DAG:           dvc dag
+#  Show metrics:            dvc metrics show
+#  Compare experiments:     dvc params diff
+# ============================================================
 
+stages:
+
+  # ----------------------------------------------------------
+  #  STAGE 1 - preprocess
+  #  Cleans raw MedEasy CSV: fills NaN text fields, normalises
+  #  casing, and concatenates text_cols into combined_text.
+  # ----------------------------------------------------------
   preprocess:
     cmd: python src/data/preprocess.py
     deps:
@@ -11,6 +27,12 @@
     outs:
       - data/processed/medeasy_processed.csv
 
+  # ----------------------------------------------------------
+  #  STAGE 2 - generate_embeddings
+  #  Encodes combined_text with MiniLM (all-MiniLM-L6-v2) via
+  #  ONNX backend. Produces a (2544, 384) float32 numpy matrix.
+  #  Replaces the old TF-IDF build_features stage.
+  # ----------------------------------------------------------
   generate_embeddings:
     cmd: python src/features/generate_embeddings.py
     deps:
@@ -27,6 +49,12 @@
       - data/features/medicine_index.pkl
       - data/features/model_metadata.json
 
+  # ----------------------------------------------------------
+  #  STAGE 3 - train
+  #  Builds MedicineRecommender using cosine similarity on
+  #  L2-normalized embeddings (dot product). Evaluates and
+  #  serialises the recommender object.
+  # ----------------------------------------------------------
   train:
     cmd: python src/models/train.py
     deps:
@@ -43,6 +71,12 @@
       - metrics/scores.json:
           cache: false
 
+  # ----------------------------------------------------------
+  #  STAGE 4 - serve
+  #  Starts the FastAPI inference server.
+  #  frozen: true -> skipped by dvc repro, run manually:
+  #    uvicorn src.serving.api:app --reload --port 8000
+  # ----------------------------------------------------------
   serve:
     cmd: uvicorn src.serving.api:app --reload --port 8000
     deps:
