@@ -71,3 +71,4 @@ Thumbs.db
 .env.*
 secrets.yaml
 gdrive_credentials.jsondvc.yaml.bak
+dvc.yaml.bak
