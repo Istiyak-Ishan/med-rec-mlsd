@@ -1,2 +1,4 @@
 /tfidf_matrix.pkl
 /medicine_index.pkl
+/embeddings.pkl
+/model_metadata.json

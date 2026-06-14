@@ -19,22 +19,17 @@ preprocessing:
   # Value used to fill missing text fields
   fill_value: "not specified"
 
-# ------------------------------------------------------------
 features:
-  # Maximum vocabulary size for TF-IDF
-  tfidf_max_features: 8000
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"   # HuggingFace model ID
+  embedding_dim: 384                                        # MiniLM output dimension
+  batch_size: 64                                            # medicines per encode batch
+  top_k: 10                                                 # default results to return
+  normalize_embeddings: true                                # L2-normalize → dot product = cosine sim
 
-  # Capture both single words and medical phrases
-  ngram_range_min: 1
-  ngram_range_max: 2
-
-  # Number of results returned per query
-  top_k: 10
-
-# ------------------------------------------------------------
 model:
-  # Similarity metric for ranking
   similarity_metric: "cosine"
+  min_score_threshold: 0.25     # raise from 0.05 — MiniLM scores are denser than TF-IDF
+# ------------------------------------------------------------
 
   # NOTE:
   # No threshold is used anymore.

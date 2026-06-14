@@ -1,7 +1,7 @@
 {
-  "coverage": 0.266835,
-  "avg_similarity": 0.960612,
+  "coverage": 0.1742,
+  "avg_similarity": 0.9369,
   "total_medicines": 2376,
   "sample_size": 100,
-  "unique_recommended": 634
+  "model": "sentence-transformers/all-MiniLM-L6-v2"
 }
